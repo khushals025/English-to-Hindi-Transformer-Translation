@@ -324,6 +324,55 @@ decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention,
   <img src="https://miro.medium.com/v2/resize:fit:796/1*_tXHN8LE-1LqrclrP9bCMg.png" alt="Image Alt Text" width ='250'>
 </div>
 
+```bash
+class LayerNormalization(nn.Module):
+    def __init__(self, parameter_shape, epsilon = 1e-5):
+        super().__init__()
+        self.parameter_shape = parameter_shape
+        self.epsilon = epsilon
+        self.gamma = nn.Parameter(torch.ones(parameter_shape))
+        self.beta = nn.Parameter(torch.zeros(parameter_shape))
+
+    def forward(self, input): # input --> (batch_size, sequence_len, d_model)
+        dims = [-(i +1) for i in range(len(self.parameter_shape))] # len describes the dimention which should be used to compute mean.
+        # here len is 1 --> renge is 0 --> so dims = [-1]--> so mean is computed along d_model 
+        mean = input.mean(dim = dims, keepdim = True)  # normalised across d_model or embeddin_size (every sentence)
+        var = ((input - mean)**2).mean(dim = dims, keepdim = True)
+        std = (var + self.epsilon).sqrt()
+        y = (input - mean)/std
+        output = self.gamma * y + self.beta
+        return output
+```
 
 
+```bash
 
+class EncoderLayer(nn.Module):
+    def __init__(self, d_model, ffn_hidden, num_heads, drop_prob):
+        super().__init__()
+		.
+		.
+        self.norm1 = LayerNormalization(parameter_shape = [d_model])
+
+
+class EncoderLayer(nn.Module):
+    def __init__(self, d_model, ffn_hidden, num_heads, drop_prob):
+        super().__init__()
+		.
+		.
+		.
+    def forward(self, x, self_attention_mask): 
+        resudual_x = x.clone()
+		.
+		.
+		.
+        x = self.norm1(resudual_x + x)
+        residual_x = x.clone()
+		.
+		.
+		.
+        x = self.norm2(residual_x + x)
+        return x 
+
+
+```
