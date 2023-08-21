@@ -1,6 +1,6 @@
 # English to Hindi Transformer Translation
 
-This repository contains code for translating English text to Hindi using a Transformer architecture with attention mechanisms.
+This repository contains code explanation and concepts to know for translating English text to Hindi using a Transformer architecture with attention mechanisms.
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -288,8 +288,6 @@ decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention,
 </div>
 
 
-
-
 ```bash
 # here x is eng_batch and y is hin_batch 
                                       
@@ -307,5 +305,25 @@ decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention,
 
 
 - Cross-attention is a mechanism that allows the decoder layers to incorporate information from the input sequence. This integration of information enables the decoder to predict the next token in the output sequence accurately.
+
+- ### Addding Residual and Layer Normalization 
+
+
+- Layer normalization is used in the Transformer model to help stabilize training, improve convergence, and mitigate the impact of input sequence length on the model's performance.
+- There are many types of normalization where the axis varies along which normalization is carried out, it is shown as follows. Note that in this project we will be using Layer Normalization.
+
+<div align="center">
+  <img src="https://www.imaios.com/i/var/site/storage/images/0/8/3/4/464380-3-eng-GB/standardization_types.png?caption=1&ixlib=php-3.3.1&q=75&w=680" alt="Image Alt Text" width = "600">
+</div>
+
+- The Transformer model is a deep neural network architecture with multiple layers of self-attention and feed-forward neural networks. Each layer involves a series of matrix multiplications and non-linear transformations. During training, as gradients are propagated through these layers, the gradients can become very large or very small, leading to unstable training. This is known as the "exploding" or "vanishing" gradient problem.
+- Layer normalization helps address these issues by normalizing the activations within each layer independently. It works similarly to batch normalization but operates along the feature dimension rather than the batch dimension. In layer normalization, the mean and variance of the activations are computed across the feature dimension (here it will be along d_model) for each individual example in the batch. The activations are then normalized based on these statistics, and learnable scale and shift parameters are applied to allow the model to learn the optimal scaling and translation
+
+
+<div align="center">
+  <img src="https://miro.medium.com/v2/resize:fit:796/1*_tXHN8LE-1LqrclrP9bCMg.png" alt="Image Alt Text" width ='250'>
+</div>
+
+
 
 
