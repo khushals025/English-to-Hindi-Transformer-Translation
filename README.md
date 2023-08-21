@@ -47,6 +47,13 @@ import math
 ```
 
 ## Transformer Architecture
+- input data
+- Embeddings
+- Self Attention Mechanism
+- Cross Attention Mechanism
+- Masking
+- Feed Forward NN
+- Add and Normalization
  
 
 
