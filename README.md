@@ -268,3 +268,16 @@ decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention,
 
 - ### Multi-Head Self Attention
 
+
+
+<div align="center">
+  <img src="https://deepfrench.gitlab.io/deep-learning-project/resources/transformer.png" alt="Image Alt Text" width=“200">
+</div>
+
+
+
+- Apply self-attention multiple times in parallel. For each head(self-attention layer) we use different W_q, W_k, W_v then concatenate the results —> A.
+- the weights for q, k, and v are learned through the linear transformation performed by the self.qkv_layer (nn.Linear) in the MultiHeadAttention class. The linear layer learns the weights that transform the input x into query, key, and value representations for each head.
+- num_head = 8 , head dimension is given by d_model // num_head. 
+-  
+
