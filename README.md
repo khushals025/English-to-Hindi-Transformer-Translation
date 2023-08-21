@@ -164,10 +164,41 @@ def forward(self, x , start_token, end_token):
 
 - ### Scaled Dot Product Attention
 
- 
-
-<div align="left">
-  <img src="https://production-media.paperswithcode.com/methods/35184258-10f5-4cd0-8de3-bd9bc8f88dc3.png" alt="Image Alt Text" width="250">
+<div align="center">
+  <img src="https://blog.paperspace.com/content/images/2020/05/1_9nUzdaTbKzJrAsq1qqJNNA.png" alt="Image Alt Text" width="600">
 </div>
 
+
+- Q, K and V are Query , Key and Value with dimensions d_q, = d_k and d_v.
+- They are fed into the following formula to compute scaled dot product attention.
+
+
+<div align="center">
+  <img src="https://static.packt-cdn.com/products/9781800565791/graphics/Images/B16681_01_005.png" alt="Image Alt Text" width=“100">
+</div>
+
+
+- size of each tensor is (batch_size, sequence_length, d_model)
+- where, batch_size = 30, max_sequnece_len = 360, d_model = 512
+- We can also initialize Q and K with the following
+
+
+```bash
+from torch import nn 
+
+nn.Linear(d_model, d_model)
+```
+
+
+- or can split or chunk them as I have done in the code 
+
+
+```bash
+self.qkv_layer = nn.Linear(d_model, 3*d_model) # querey, key and value 
+.
+.
+.
+q, k, v = qkv.chunk(3, dim=-1) # split into 3 
+
+```
 
