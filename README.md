@@ -353,6 +353,8 @@ class EncoderLayer(nn.Module):
 		.
 		.
         self.norm1 = LayerNormalization(parameter_shape = [d_model])
+        self.norm2 = LayerNormalization(parameter_shape = [d_model])
+
 
 
 class EncoderLayer(nn.Module):
