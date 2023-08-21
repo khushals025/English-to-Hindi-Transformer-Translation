@@ -270,7 +270,7 @@ decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention,
 
 
 <div align="center">
-  <img src="https://deepfrench.gitlab.io/deep-learning-project/resources/transformer.png" alt="Image Alt Text" width="600">
+  <img src="https://deepfrench.gitlab.io/deep-learning-project/resources/transformer.png" alt="Image Alt Text" width='600'>
 </div>
 
 - Apply self-attention multiple times in parallel. For each head(self-attention layer) we use different W_q, W_k, W_v then concatenate the results —> A.
@@ -281,11 +281,21 @@ decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention,
 
 - ### Multi-Head Cross Attention
 
-<div align = 'center'>
-  <img src="https://vaclavkosar.com/images/cross-attention-in-transformer-decoder.png" alt="Image 1" width='400'>
+
+
+<div align="center">
+  <img src="https://vaclavkosar.com/images/cross-attention-in-transformer-decoder.png" alt="Image Alt Text" width= "400">
 </div>
- 
 
 
+- the difference here from Multi-Head Self Attention is that there are 2 sequences of 
+- Except for inputs, cross-attention calculation is the same as Multi-Head Self Attention. Cross-attention combines asymmetrically two separate embedding sequences ( English from Encoder and Hindi from Decoder ) of same dimension, in contrast self-attention input is a single embedding sequence. One of the sequences serves as a query input, while the other as a key and value inputs.
+
+<div align="center">
+  <img src="https://vaclavkosar.com/images/cross-attention-in-transformer-architecture.png" alt="Image Alt Text" width = "400">
+</div>
+
+
+- Cross-attention is a mechanism that allows the decoder layers to incorporate information from the input sequence. This integration of information enables the decoder to predict the next token in the output sequence accurately.
 
 
