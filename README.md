@@ -5,7 +5,9 @@ This repository contains code for translating English text to Hindi using a Tran
 ## Table of Contents
 - [Introduction](#introduction)
 - [Installation](#installation)
-- [
+- [Dataset](#dataset)
+- [Transformer Architecture](#transformer-architecture)
+- 
 
 ## Introduction
 
@@ -45,6 +47,11 @@ from torch import nn
 from torch.utils.data import Dataset, DataLoader 
 import math 
 ```
+
+## Dataset
+Samanantar is the largest publicly available parallel corpora collection for Indic languages: Assamese, Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Oriya, Punjabi, Tamil, Telugu. The corpus has 49.6M sentence pairs between English to Indian Languages.
+I have used English to Hindi Translation datset in this repository.
+- dataset: <https://ai4bharat.iitm.ac.in/samanantar>
 
 ## Transformer Architecture
 - input data
