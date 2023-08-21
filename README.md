@@ -208,6 +208,14 @@ These look-ahead and padding masks are applied inside the scaled dot-product att
 ∞
 all the values in the input to the softmax function that should not be considered. For each of these large negative inputs, the softmax function will, in turn, produce an output value that is close to zero, effectively masking them out.
 
+
+
+<div align="center">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1638824585791/vkXCmdGyw.png?auto=compress,format&format=webp" alt="Image Alt Text" width="350">
+</div>
+
+
+
 ```bash
 NEG_INFTY = -1e9
 
@@ -215,3 +223,48 @@ encoder_self_attention_mask = torch.where(encoder_padding_mask, NEG_INFTY, 0)
 decoder_self_attention_mask = torch.where(look_ahead_mask + decoder_padding_mask_self_attention, NEG_INFTY, 0)
 decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention, NEG_INFTY, 0)
 ```
+
+
+
+- following is the flow of encoder_self_attention_mask to incapsulate the connection of all the functions in transformer_model.py
+- Note:  Each EncoderLayer is a module that contains operations like multi-head self-attention, feed-forward neural network, layer normalization, etc. When you call the forward method of the SequentialEncoder, it iterates through each EncoderLayer and applies them sequentially to the input tensors.
+
+
+
+```bash
+                     +------------------+
+                     |   Transformer    |
+                     +------------------+
+                            |
+                            |       +----------------+
+                            +------>|     Encoder     |
+                            |       +----------------+
+                            |              |
+                            |              |
+                            |       +----------------+
+                            +------>| Sequential     |
+                            |       |   Encoder      |
+                            |       +----------------+
+                            |              |
+                            |              |
+                            |       +----------------+
+                            +------>| EncoderLayer   |
+                            |       +----------------+
+                            |              |
+                            |              |
+                            |       +----------------+
+                            +------>|  MultiHead     |
+                            |       |  Attention     |
+                            |       +----------------+
+                            |              |
+                            |              |
+                            |       +----------------+
+                            +------>|   Scaled Dot   |
+                            |       |   Product      |
+                            |       +----------------+
+```
+
+
+
+- ### Multi-Head Self Attention
+
