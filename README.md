@@ -95,7 +95,7 @@ index_hin = { i:c for i,c in enumerate(hindi_vocab)}
 hin_index = { c:i for i,c in enumerate(hindi_vocab)}
 ```
 
-### Positional Encoding
+- ### Positional Encoding
 
 
 <div align="center">
@@ -114,7 +114,7 @@ Tom bit a dog.
 A dog bit Tom.
 ```
 
-### How to Encode word positions?
+- ### How to Encode word positions?
 
 
 We use sin and cosine functions of different frequencies.We represent each token as a vector of 512 dimensions (from element 0 to element 511). A position (pos) is an integer from 0 to a pre-defined maximum number of tokens in a sentence (a.k.a. max length) minus 1. For example, if the max length is 128, positions are 0 to 127.
@@ -128,7 +128,7 @@ Here, d_model = 512
 pos is integer within range 0 <= pos < T, where T is input sequence size or max_sequence_len
 
 
-### Sentence Embedding
+- ### Sentence Embedding
 
 - first we convert a sentence(string) into list of tokens(values(int) or index of unique vocabularies) using Index-to-token and token-to-index mappings.
 - add START_TOKEN at the beginning 
@@ -148,20 +148,26 @@ def forward(self, x , start_token, end_token):
 ```
 
 
-
 <div align="center">
   <img src="https://kikaben.com/transformers-positional-encoding/images/pos-encoding-plus-word-embedding.png" alt="Image Alt Text" width="400">
 </div>
 
 
 ## Transformer Architecture
-- input data
-- Embeddings
-- Self Attention Mechanism
-- Cross Attention Mechanism
-- Masking
-- Feed Forward NN
-- Add and Normalization
+- Scaled Dot Product Attention
+- Multi-Head Self Attention
+- Multi-Head Cross Attention
+- Layer Normalization
+- Feed Forward Neural Network
+- Encoder
+- Decoder
+
+- ### Scaled Dot Product Attention
+
  
+
+<div align="left">
+  <img src="https://production-media.paperswithcode.com/methods/35184258-10f5-4cd0-8de3-bd9bc8f88dc3.png" alt="Image Alt Text" width="250">
+</div>
 
 
