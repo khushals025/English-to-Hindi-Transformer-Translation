@@ -211,7 +211,7 @@ all the values in the input to the softmax function that should not be considere
 
 
 <div align="center">
-  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1638824585791/vkXCmdGyw.png?auto=compress,format&format=webp" alt="Image Alt Text" width="350">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1638824585791/vkXCmdGyw.png?auto=compress,format&format=webp" alt="Image Alt Text" width="500">
 </div>
 
 
@@ -269,15 +269,23 @@ decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention,
 - ### Multi-Head Self Attention
 
 
-
 <div align="center">
-  <img src="https://deepfrench.gitlab.io/deep-learning-project/resources/transformer.png" alt="Image Alt Text" width=“200">
+  <img src="https://deepfrench.gitlab.io/deep-learning-project/resources/transformer.png" alt="Image Alt Text" width="600">
 </div>
-
-
 
 - Apply self-attention multiple times in parallel. For each head(self-attention layer) we use different W_q, W_k, W_v then concatenate the results —> A.
 - the weights for q, k, and v are learned through the linear transformation performed by the self.qkv_layer (nn.Linear) in the MultiHeadAttention class. The linear layer learns the weights that transform the input x into query, key, and value representations for each head.
-- num_head = 8 , head dimension is given by d_model // num_head. 
--  
+- num_head = 8 , head dimension is given by d_model // num_head. i.e 64
+- self.num_head * self.head_dim = d_model (512)
+-  output is in shape (batch_size, sequence_length, d_model)
+
+- ### Multi-Head Cross Attention
+
+<div align = 'center'>
+  <img src="https://vaclavkosar.com/images/cross-attention-in-transformer-decoder.png" alt="Image 1" width='400'>
+</div>
+ 
+
+
+
 
