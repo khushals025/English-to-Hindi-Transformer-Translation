@@ -288,7 +288,17 @@ decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention,
 </div>
 
 
-- the difference here from Multi-Head Self Attention is that there are 2 sequences of 
+
+
+```bash
+# here x is eng_batch and y is hin_batch 
+                                      
+ kv = self.kv_layer(x)
+ q = self.q_layer(y)
+
+```
+
+
 - Except for inputs, cross-attention calculation is the same as Multi-Head Self Attention. Cross-attention combines asymmetrically two separate embedding sequences ( English from Encoder and Hindi from Decoder ) of same dimension, in contrast self-attention input is a single embedding sequence. One of the sequences serves as a query input, while the other as a key and value inputs.
 
 <div align="center">
