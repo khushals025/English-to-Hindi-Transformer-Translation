@@ -172,10 +172,10 @@ def forward(self, x , start_token, end_token):
 - Q, K and V are Query , Key and Value with dimensions d_q, = d_k and d_v.
 - They are fed into the following formula to compute scaled dot product attention.
 
-
 <div align="center">
-  <img src="https://static.packt-cdn.com/products/9781800565791/graphics/Images/B16681_01_005.png" alt="Image Alt Text" width=“100">
+  <img src="https://static.packt-cdn.com/products/9781800565791/graphics/Images/B16681_01_005.png" alt="Image Alt Text" width="350">
 </div>
+
 
 
 - size of each tensor is (batch_size, sequence_length, d_model)
@@ -202,3 +202,16 @@ q, k, v = qkv.chunk(3, dim=-1) # split into 3
 
 ```
 
+- You may note that the scaled dot-product attention can also apply a mask to the attention scores before feeding them into the softmax function. 
+- a look-ahead mask is also required to prevent the decoder from attending to succeeding words, such that the prediction for a particular word can only depend on known outputs for the words that come before it.
+These look-ahead and padding masks are applied inside the scaled dot-product attention set to -
+∞
+all the values in the input to the softmax function that should not be considered. For each of these large negative inputs, the softmax function will, in turn, produce an output value that is close to zero, effectively masking them out.
+
+```bash
+NEG_INFTY = -1e9
+
+encoder_self_attention_mask = torch.where(encoder_padding_mask, NEG_INFTY, 0)
+decoder_self_attention_mask = torch.where(look_ahead_mask + decoder_padding_mask_self_attention, NEG_INFTY, 0)
+decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention, NEG_INFTY, 0)
+```
