@@ -5,9 +5,7 @@ This repository contains code for translating English text to Hindi using a Tran
 ## Table of Contents
 - [Introduction](#introduction)
 - [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+- [
 
 ## Introduction
 
@@ -46,6 +44,9 @@ import torch
 from torch import nn
 from torch.utils.data import Dataset, DataLoader 
 import math 
+```
 
+## Transformer Architecture
+ 
 
 
