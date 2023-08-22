@@ -420,7 +420,144 @@ In summary, the feed-forward neural network in the Transformer model enhances th
 </ul>
 
 
+
 <div align="center">
   <img src="https://wikidocs.net/images/page/162096/3_encoder_decoder_layer_class.png" alt="Image Alt Text" width = '600'>
 </div>
+
+
+- In the above image the num of layers is 6 ( according to “Attention is All you Need”). However in this project I have used just 1 layer becuase of computational expense.
+
+```bash 
+class EncoderLayer(nn.Module):
+    def __init__(self, d_model, ffn_hidden, num_heads, drop_prob):
+        super().__init__()
+        self.attention = MultiHeadAttention(d_model = d_model, num_head = num_heads)
+        self.norm1 = LayerNormalization(parameter_shape = [d_model])
+        self.dropout1 = nn.Dropout(p=drop_prob)
+        self.ffn = PositionWiseFeedForward(d_model = d_model, hidden = ffn_hidden, drop_prob = drop_prob)
+        self.norm2 = LayerNormalization(parameter_shape = [d_model])
+        self.dropout2 = nn.Dropout(p=drop_prob)
+
+    def forward(self, x, self_attention_mask): # x --> (batch_size, max_sequence_len, d_model), self_attention_maks --> (num_head, batch_size, max_sequence_len, max_sequence_len)
+        resudual_x = x.clone()
+        x = self.attention(x, self_attention_mask) # (batch_size, sequence_length, d_model)
+        x = self.dropout1(x)
+        x = self.norm1(resudual_x + x)
+        residual_x = x.clone()
+        x = self.ffn(x)
+        x = self.dropout2(x)
+        x = self.norm2(residual_x + x)
+        return x 
+    
+```
+
+
+
+
+```bash
+class Encoder(nn.Module):
+    def __init__(self,
+                 d_model,
+                 ffn_hidden,
+                 num_heads,
+                 drop_prob,
+                 num_layers,  # <----- num_layers = 1
+                 max_sequence_length,
+                 language_to_index,
+                 START_TOKEN,
+                 END_TOKEN, 
+                 PADDING_TOKEN):
+        super().__init__()
+        self.sentence_embedding = SentenceEmbedding( max_sequence_length, d_model, language_to_index, START_TOKEN, END_TOKEN, PADDING_TOKEN)
+        self.layers = SequentialEncoder(*[EncoderLayer(d_model, ffn_hidden, num_heads, drop_prob) for _ in range(num_layers)])
+      
+    def forward(self, x, self_attention_mask, start_token, end_token):
+        x = self.sentence_embedding(x ,start_token, end_token)
+        x = self.layers(x, self_attention_mask)
+        return x 
+
+```
+- x is English batch 
+- Important thing to note here is in Encoder language_to_index is English vocabulary mapping and in Decoder it is Hindi vacabulary mapping.
+
+<ul>
+  <li>
+    <h3>Decoder</h3>
+    <ul>
+      <li>
+        The DecoderLayer comprises of:
+        <ul>
+          <li>Multi-Head Self Attention Layer</li>
+          <li>Layer Normalization and adding residue</li>
+          <li>Multi-Head Cross Attention Layer</li>
+          <li>Layer Normalization and adding residue</li>
+          <li>Feed Forward NN</li>
+          <li>Layer Normalization and adding residue</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+
+```bash
+class DecoderLayer(nn.Module):
+    def __init__(self, d_model, ffn_hidden, num_heads, drop_prob):
+        super().__init__()
+        self.self_attention = MultiHeadAttention(d_model=d_model, num_head=num_heads)
+        self.layer_norm1 = LayerNormalization(parameter_shape=[d_model])
+        self.dropout1 = nn.Dropout(p = drop_prob)
+
+        self.encoder_decoder_attention = MultiHeadCrossAttention(d_model=d_model, num_head=num_heads)
+        self.layer_norm2 = LayerNormalization(parameter_shape=[d_model])
+        self.dropout2 = nn.Dropout(p=drop_prob)
+
+        self.ffn = PositionWiseFeedForward(d_model=d_model, hidden=ffn_hidden, drop_prob=drop_prob)
+        self.layer_norm3 = LayerNormalization(parameter_shape=[d_model])
+        self.dropout3 = nn.Dropout(p=drop_prob)
+
+    def forward(self, x, y , self_attention_mask, cross_attention_mask):
+        residual_y = y.clone()
+        y = self.self_attention(y, self_attention_mask)
+        y = self.dropout1(y)
+        y = self.layer_norm1(y + residual_y)
+
+        residual_y = y.clone()
+        y = self.encoder_decoder_attention(x, y, cross_attention_mask)
+        y = self.dropout2(y)
+        y = self.layer_norm2(residual_y + y )
+
+        residual_y = y.clone()
+        y = self.ffn(y)
+        y = self.dropout3(y)
+        y = self.layer_norm3(residual_y + y)
+        return y 
+
+```
+- y is hindi batch 
+
+- Decoder is also run just once I.e here num_layers = 1, However can be changed while hyper parameter tuning for better results. 
+```bash
+class Decoder(nn.Module):
+    def __init__(self,
+                 d_model, 
+                 ffn_hidden,
+                 num_heads,
+                 drop_prob,
+                 num_layers,
+                 max_sequence_length,
+                 language_to_index,
+                 START_TOKEN,
+                 END_TOKEN, 
+                 PADDING_TOKEN):
+        super().__init__()
+        self.sentence_embedding = SentenceEmbedding(max_sequence_length, d_model, language_to_index, START_TOKEN, END_TOKEN, PADDING_TOKEN)
+        self.layer = SequentialDecoder(*[DecoderLayer(d_model, ffn_hidden, num_heads, drop_prob) for _ in range(num_layers)])
+
+    def forward(self, x , y , self_attention_mask, cross_attention_mask, start_token, end_token):
+        y = self.sentence_embedding(y, start_token, end_token)
+        y = self.layer(x, y , self_attention_mask, cross_attention_mask)
+        return y 
+```
 
