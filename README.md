@@ -2,6 +2,10 @@
 
 This repository contains code explanation and concepts to know for translating English text to Hindi using a Transformer architecture with attention mechanisms.
 
+<div align="center">
+  <img src="https://i0.wp.com/www.michigandaily.com/wp-content/uploads/2021/03/0-1.jpg?fit=1200%2C960&ssl=1" alt="Image Alt Text" width='700'>
+</div>
+
 ## Table of Contents
 - [Introduction](#introduction)
 - [Installation](#installation)
