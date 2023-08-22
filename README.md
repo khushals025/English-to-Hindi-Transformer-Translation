@@ -8,6 +8,7 @@ This repository contains code explanation and concepts to know for translating E
 - [Dataset](#dataset)
 - [Preprocessing](#preprocessing)
 - [Transformer Architecture](#transformer-architecture)
+- [Results](#results)
 - [Future Scope](#future-scope)
 
 ## Introduction
@@ -590,8 +591,48 @@ class Transformer(nn.Module):
 ```bash
  self.linear = nn.Linear(d_model, d_output)
 ```
-	
+
+
+
+
+<h2>Results</h2>
+
+```bash
+translation = translate("i hope this works.")
+print(translation)
+```
+
+```bash
+मुझे लगता है कि यह काम कर रहा है।<END>
+```
+
+```bash
+translation = translate("what should we do when the day starts?")
+print(translation)
+```
+
+```bash
+क्या है कि क्या करने के लिए क्या है?<END>
+```
+
+<p> This results is generated after training for 6 epochs, where each epoch has 5194 iterations  </p>
+
+```bash
+batch_size = 30
+train_loader = DataLoader(dataset, batch_size)
+iterator = iter(train_loader)
+```
+
+```bash
+len(iterator) # --> 5194
+```
+
+<p> With more training and increasing the num of layers in Encoder and Decoder model we can achieve more accurate results. </p>
+
+
+ 
 <h2>Future Scope</h2>
 <p>In order to execute this code, I used Google Colab Pro+ as it is computationally expensive to train this model. However, I used just 1 layer for the encoder and decoder and employed 6 epochs. I used around 250 compute units. If you want to check out the price ranges for Google Colab, you can find more information <a href="https://colab.research.google.com/signup">here</a>.</p>
+<p>Adding an accuracy metric like Translation Edit Rate (ETR). I am working on it and will upload results soon. </p>
 
 
