@@ -8,7 +8,7 @@ This repository contains code explanation and concepts to know for translating E
 - [Dataset](#dataset)
 - [Preprocessing](#preprocessing)
 - [Transformer Architecture](#transformer-architecture)
-- 
+- [Future Scope](#future-scope)
 
 ## Introduction
 
@@ -560,6 +560,38 @@ class Decoder(nn.Module):
         y = self.layer(x, y , self_attention_mask, cross_attention_mask)
         return y 
 ```
+
+<h2> Transformer</h2>
+<p> Following is the execution of Encoder and Decoder in Transformer class. </p>
+
+```bash
+class Transformer(nn.Module):
+    def __init__(self, 
+                 d_model,
+                 ffn_hidden,
+                 num_heads,
+                 drop_prob,
+                 num_layers,
+                 max_sequence_length,
+                 d_output,
+                 english_to_index,
+                 hindi_to_index,
+                 START_TOKEN,
+                 END_TOKEN,
+                 PADDING_TOKEN):
+        super().__init__()
+        self.encoder = Encoder(d_model, ffn_hidden, num_heads, drop_prob, num_layers, max_sequence_length, english_to_index, START_TOKEN, END_TOKEN, PADDING_TOKEN)
+        self.decoder = Decoder(d_model, ffn_hidden, num_heads, drop_prob, num_layers, max_sequence_length, hindi_to_index, START_TOKEN, END_TOKEN, PADDING_TOKEN)
+        self.linear = nn.Linear(d_model, d_output)
+```
+<p> here d_output is hindi vocabulary as we need output in Hindi language.</p>
+<p> To achieve that we use a linear transformation layer at the end 
+	
+```bash
+ self.linear = nn.Linear(d_model, d_output)
+```
+	
 <h2>Future Scope</h2>
 <p>In order to execute this code, I used Google Colab Pro+ as it is computationally expensive to train this model. However, I used just 1 layer for the encoder and decoder and employed 6 epochs. I used around 250 compute units. If you want to check out the price ranges for Google Colab, you can find more information <a href="https://colab.research.google.com/signup">here</a>.</p>
+
 
