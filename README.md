@@ -560,4 +560,6 @@ class Decoder(nn.Module):
         y = self.layer(x, y , self_attention_mask, cross_attention_mask)
         return y 
 ```
+<h2>Future Scope</h2>
+<p>In order to execute this code, I used Google Colab Pro+ as it is computationally expensive to train this model. However, I used just 1 layer for the encoder and decoder and employed 6 epochs. I used around 250 compute units. If you want to check out the price ranges for Google Colab, you can find more information <a href="https://colab.research.google.com/signup">here</a>.</p>
 
