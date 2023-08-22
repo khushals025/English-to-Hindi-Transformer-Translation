@@ -316,7 +316,7 @@ decoder_cross_attention_mask = torch.where(decoder_padding_mask_cross_attention,
   <img src="https://www.imaios.com/i/var/site/storage/images/0/8/3/4/464380-3-eng-GB/standardization_types.png?caption=1&ixlib=php-3.3.1&q=75&w=680" alt="Image Alt Text" width = "600">
 </div>
 
-- The Transformer model is a deep neural network architecture with multiple layers of self-attention and feed-forward neural networks. Each layer involves a series of matrix multiplications and non-linear transformations. During training, as gradients are propagated through these layers, the gradients can become very large or very small, leading to unstable training. This is known as the "exploding" or "vanishing" gradient problem.
+
 - Layer normalization helps address these issues by normalizing the activations within each layer independently. It works similarly to batch normalization but operates along the feature dimension rather than the batch dimension. In layer normalization, the mean and variance of the activations are computed across the feature dimension (here it will be along d_model) for each individual example in the batch. The activations are then normalized based on these statistics, and learnable scale and shift parameters are applied to allow the model to learn the optimal scaling and translation
 
 
@@ -344,6 +344,7 @@ class LayerNormalization(nn.Module):
         return output
 ```
 
+- as gradients are propagated backward during training, they can become very small due to repeated multiplication by small weights. This leads to gradients that vanish, causing slow or even stalled learning in deeper layers of the network. To deal with this problem residue is added before normalization.
 
 ```bash
 
@@ -375,6 +376,51 @@ class EncoderLayer(nn.Module):
 		.
         x = self.norm2(residual_x + x)
         return x 
-
-
 ```
+
+- ### Feed Forward Neural Network
+
+- In this project we have used 1048 nodes in the hidden layer. 
+- there are 2 hidden layers. First a linear transformation is applied to give output shape (batch_size, max_sequence_length, hidden) from (batch_size, max_sequence_length, d_model)
+- ReLU Activation function is applied over this output i.e f(x) = max(0, input) --> -ve becomes 0, +ve remains the same 
+- Followed by a Dropout layer with drop_out probability of 10%.
+- Finally the output is transformed linearly back to its original shape —> (batch_size, max_sequence_length, d_model)
+- Feed Forward Layer is used in both Encoder as well as Decoder structure in Transformer.
+
+<div align="center">
+  <img src="https://miro.medium.com/v2/resize:fit:791/0*hzIQ5Fs-g8iBpVWq.jpg" alt="Image Alt Text" width ='500'>
+</div>
+
+- ### Why use a Feed-Forward NN?
+
+- its main purpose is to transform the attention vectors into a form that is acceptable by the next encoder or decoder layer.
+-  During training, the weights of the linear layers in the FFN are updated through backpropagation, just like in any other neural network. The model learns to adjust these weights to minimize the loss function associated with the task being performed, such as language translation.
+- ### Which Weights are Updated: 
+- The weights that are updated during training are the weights of the linear layers within the FFN. The weights of other components in the model, such as the attention mechanisms, positional encodings, and embeddings, are updated as well. The entire model is trained in an end-to-end manner to jointly optimize all components for the specific task.
+In summary, the feed-forward neural network in the Transformer model enhances the model's ability to capture complex patterns and relationships in the data by introducing non-linearity and position-wise transformations. The weights of the FFN's linear layers are updated during training through backpropagation, along with other weights in the model, to learn representations that improve the model's performance on the given task.
+
+
+
+<ul>
+  <li>
+    <h3>Encoder</h3>
+    <ul>
+      <li>
+        The EncoderLayer comprises of:
+        <ul>
+          <li>Multi-Head Self Attention Layer</li>
+          <li>Layer Normalization and adding residue</li>
+          <li>Feed Forward NN</li>
+          <li>Layer Normalization and adding residue</li>
+          <li>Passing the output (K and V) along Decoder</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+
+<div align="center">
+  <img src="https://wikidocs.net/images/page/162096/3_encoder_decoder_layer_class.png" alt="Image Alt Text" width = '600'>
+</div>
+
