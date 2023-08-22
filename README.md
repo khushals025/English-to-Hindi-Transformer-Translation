@@ -394,7 +394,7 @@ class EncoderLayer(nn.Module):
 
 - ### Why use a Feed-Forward NN?
 
-- its main purpose is to transform the attention vectors into a form that is acceptable by the next encoder or decoder layer.
+- It is a Multi layer perceptron, its main purpose is to transform the attention vectors into a form that is acceptable by the next encoder or decoder layer.
 -  During training, the weights of the linear layers in the FFN are updated through backpropagation, just like in any other neural network. The model learns to adjust these weights to minimize the loss function associated with the task being performed, such as language translation.
 - ### Which Weights are Updated: 
 - The weights that are updated during training are the weights of the linear layers within the FFN. The weights of other components in the model, such as the attention mechanisms, positional encodings, and embeddings, are updated as well. The entire model is trained in an end-to-end manner to jointly optimize all components for the specific task.
