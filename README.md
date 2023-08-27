@@ -638,5 +638,5 @@ len(iterator) # --> 5194
 <h2>Future Scope</h2>
 <p>In order to execute this code, I used Google Colab Pro+ as it is computationally expensive to train this model. However, I used just 1 layer for the encoder and decoder and employed 6 epochs. I used around 250 compute units. If you want to check out the price ranges for Google Colab, you can find more information <a href="https://colab.research.google.com/signup">here</a>.</p>
 <p>Adding an accuracy metric like Translation Edit Rate (ETR). I am working on it and will upload results soon. </p>
-<p>This model is not case sensitive. which means only lowercase letter can be used as input. In future scope i would like to increase it svocabulary and make it case sensitive.</p>
+<p>This model is not case sensitive. which means only lowercase letter can be used as input. In future scope I would like to increase its vocabulary and make it case sensitive.</p>
 
